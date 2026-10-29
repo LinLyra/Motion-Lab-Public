@@ -1,0 +1,40 @@
+version: 1
+
+paths:
+  hangtime_raw: data/raw/hangtime
+  lykon_roots:
+    - data/lykon_dataset 2
+    - data/raw/lykon
+  uwb_inputs:
+    - data/raw/uwb
+    - data/uwb
+  output_root: data/processed/unified
+
+hardware:
+  imu_hz: 50.0
+  accelerometer_range_g: 4.0
+  gyroscope_range_dps: 512.0
+  adc_max: 32768.0
+  node_map:
+    1:
+      body_position: right_upper_arm
+      side: right
+    2:
+      body_position: right_forearm
+      side: right
+    3:
+      body_position: left_forearm
+      side: left
+    4:
+      body_position: left_upper_arm
+      side: left
+
+processing:
+  target_hz: 50.0
+  max_interpolation_gap_ms: 60.0
+  lowpass_cutoff_hz: 20.0
+  lowpass_order: 4
+  window_seconds: 1.2
+  step_seconds: 0.3
+  label_purity_min: 0.70
+

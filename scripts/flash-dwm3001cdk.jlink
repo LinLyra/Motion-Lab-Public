@@ -1,0 +1,8 @@
+device NRF52833_XXAA
+si SWD
+speed 4000
+r
+loadfile DWM3001CDK-CLI-FreeRTOS.hex
+r
+g
+exit

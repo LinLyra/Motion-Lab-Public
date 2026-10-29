@@ -1,0 +1,9 @@
+{
+  "imu_devices": [
+    {"name": "LYKON-001", "sensor": "IMU001", "usb_serial": "LOCAL_ONLY"},
+    {"name": "LYKON-002", "sensor": "IMU002", "usb_serial": "LOCAL_ONLY"},
+    {"name": "LYKON-003", "sensor": "IMU003", "usb_serial": "LOCAL_ONLY"},
+    {"name": "LYKON-004", "sensor": "IMU004", "usb_serial": "LOCAL_ONLY"}
+  ],
+  "uwb_tag": {"logical_id": "UWB-TAG-001", "usb_serial": "LOCAL_ONLY", "address": "0x0000"}
+}

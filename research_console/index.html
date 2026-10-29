@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LYKON Research Console</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="live.css">
+  <link rel="stylesheet" href="uwb.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">L</span><span>LYKON</span><span class="product">Research Console</span></div>
+    <div class="top-actions"><div class="privacy"><span class="pulse"></span> Local mode · No data uploaded</div></div>
+  </header>
+
+  <main>
+    <section class="session-header">
+      <div>
+        <div class="eyebrow">CAPTURE SESSION</div>
+        <div class="mode-switch"><button id="live-mode" class="mode active">Live capture</button><button id="replay-mode" class="mode">Recorded replay</button></div>
+        <h1 id="session-title">Waiting for four wearables</h1>
+        <p id="session-meta">—</p>
+      </div>
+      <div class="actions"><button id="replay-button" class="button primary">● Start recording</button><button id="stop-button" class="button">Stop</button></div>
+    </section>
+
+    <section class="metrics" aria-label="Capture quality">
+      <article><span>Sample rate</span><strong id="sample-rate">—</strong><small>100 Hz target</small></article>
+      <article><span>Received</span><strong id="received">—</strong><small>frames</small></article>
+      <article><span>Packet loss</span><strong id="packet-loss">—</strong><small id="missing">—</small></article>
+      <article><span>Elapsed</span><strong id="elapsed">0.00 s</strong><small id="duration">—</small></article>
+    </section>
+
+    <section>
+      <div class="section-heading"><div><div class="eyebrow">DEVICE FLEET</div><h2>Wearable nodes</h2></div><span>4 registered</span></div>
+      <div id="device-grid" class="device-grid"></div>
+    </section>
+
+    <section class="uwb-section">
+      <div class="section-heading"><div><div class="eyebrow">UWB RANGING</div><h2>Court ranging nodes</h2></div><span id="uwb-tag-status">TAG waiting</span></div>
+      <div id="uwb-grid" class="uwb-grid"></div>
+    </section>
+
+    <section class="charts">
+      <div class="chart-heading"><div><div class="eyebrow">LIVE SIGNAL</div><h2>Six-axis IMU signals</h2></div><div class="legend"><span class="x">X</span><span class="y">Y</span><span class="z">Z</span></div></div>
+      <article class="chart-card"><div class="chart-label"><strong>Acceleration</strong><span>g</span></div><canvas id="acceleration-chart" height="230"></canvas></article>
+      <article class="chart-card"><div class="chart-label"><strong>Angular velocity</strong><span>deg/s</span></div><canvas id="gyro-chart" height="230"></canvas></article>
+      <article class="chart-card audio-card"><div class="chart-label"><strong>Acoustic level features</strong><span>16 kHz PDM · No raw audio stored</span></div><div class="audio-readout"><div><span>RMS</span><strong id="audio-rms">—</strong></div><div><span>Peak</span><strong id="audio-peak">—</strong></div><div><span>Frames</span><strong id="audio-frames">—</strong></div></div><canvas id="audio-chart" height="180"></canvas></article>
+    </section>
+
+    <section class="bottom-grid">
+      <article class="panel">
+        <div class="eyebrow">EVENT MARKERS</div><h2>Action annotations</h2>
+        <p>Add candidate action timestamps during live capture or replay without modifying raw sensor data.</p>
+        <div class="marker-actions"><button class="marker" data-label="shot">Shot</button><button class="marker" data-label="jump">Jump</button><button class="marker" data-label="dribble">Dribble</button><button class="marker" data-label="pass">Pass</button></div>
+        <div id="marker-log" class="marker-log">No markers yet</div>
+      </article>
+      <article class="panel quality">
+        <div class="eyebrow">QUALITY REPORT</div><h2>Data quality</h2>
+        <div class="quality-row"><span>Node timestamps</span><strong class="good">Continuous</strong></div>
+        <div class="quality-row"><span>Acceleration baseline</span><strong class="good">≈ 1 g</strong></div>
+        <div class="quality-row"><span>Gyroscope range</span><strong class="warning">Legacy clipping observed</strong></div>
+        <div class="quality-row"><span>Raw file</span><strong id="source-file">—</strong></div>
+      </article>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
