@@ -1,10 +1,10 @@
 # Motion Lab — Public Research Version
 
-Motion Lab is an in-progress research framework for studying wearable sensing,
-player motion, and indoor localisation in basketball. This public version is
-prepared to communicate the scope, technical progress, and proposed research
-methodology of an MPhil project. It is a research repository, not a product
-portfolio or a claim of a completed commercial system.
+Motion Lab is an in-progress technical research framework for studying wearable
+sensing, player motion, and indoor localisation in basketball. This public
+version documents the implemented system architecture, data engineering,
+signal-processing pipeline, and reproducible research tooling. It is a research
+codebase rather than a product portfolio or commercial product claim.
 
 The current prototype combines four arm-worn IMU nodes, one UWB tag, three UWB
 anchors, privacy-preserving acoustic level features, and optional video-derived
@@ -38,56 +38,67 @@ alignment, feature learning, evaluation, and reproducibility.
 | Motion analysis | Filtering, temporal windowing, interpretable features and rule baselines implemented |
 | Modelling | Leakage-aware classical baseline and grouped evaluation structure implemented |
 | Multimodal supervision | Video pose and manual-label interfaces designed for later controlled studies |
-| Research validation | Participant protocol, ground truth and field evaluation remain future MPhil work |
+| Field validation | Participant protocol, ground truth and controlled evaluation remain future work |
 
 ## Research system architecture
 
 ```mermaid
 flowchart LR
-    subgraph sensing["Sensing and Ground Truth"]
+    subgraph sensing["Sensor and Reference Inputs"]
         imu["Four arm-worn IMU nodes"]
         audio["On-device acoustic level features"]
         uwb["UWB tag and three anchors"]
         labels["Video and manual annotations"]
     end
 
-    subgraph acquisition["Acquisition and Data Governance"]
-        collector["Local acquisition service"]
+    subgraph acquisition["Acquisition Layer"]
+        ble["BLE IMU collector"]
+        serial["UWB serial logger"]
         timing["Sequence checks and timestamp alignment"]
-        contract["Versioned session data contract"]
     end
 
-    subgraph analysis["Motion and Position Research"]
+    subgraph data["Versioned Research Data Layer"]
+        contract["Versioned session data contract"]
+        provenance["Raw data, labels and derived-data separation"]
+    end
+
+    subgraph analysis["Processing and Analysis"]
         quality["Schema validation and quality checks"]
         motion["Filtering, windows and motion features"]
-        ranging["UWB ranging and localisation pipeline"]
-        methods["Interpretable rules and learning baselines"]
+        ranging["UWB range parsing and quality analysis"]
+        pose["Video pose and motion templates"]
+        methods["Rules and leakage-aware ML baselines"]
     end
 
-    subgraph research["MPhil Research Programme"]
-        fusion["Multimodal alignment and fusion"]
-        evaluation["Participant-independent field evaluation"]
-        findings["Basketball action and movement findings"]
+    subgraph outputs["Reproducible Research Outputs"]
+        features["Windowed feature tables"]
+        reports["Quality and evaluation reports"]
+        artifacts["Versioned model and analysis artifacts"]
     end
 
-    imu -->|"BLE IMU packets"| collector
-    audio -->|"BLE level features"| collector
-    uwb -->|"USB range records"| collector
-    labels -->|"Reference intervals"| contract
-    collector --> timing --> contract
-    contract --> quality
+    imu -->|"BLE packets"| ble
+    audio -->|"BLE features"| ble
+    uwb -->|"USB records"| serial
+    ble --> timing
+    serial --> timing
+    timing --> contract
+    labels -->|"Reference records"| contract
+    contract --> provenance
+    provenance --> quality
     quality --> motion
     quality --> ranging
+    quality --> pose
     motion --> methods
-    ranging -.-> fusion
-    methods -.-> fusion
-    labels -.-> fusion
-    fusion -.-> evaluation -.-> findings
+    motion --> features
+    pose --> features
+    ranging --> reports
+    methods --> reports
+    methods --> artifacts
 ```
 
-Solid arrows represent the implemented acquisition and processing foundation.
-Dashed arrows identify integration and validation work proposed for the MPhil
-research programme.
+The diagram reflects the repository's implemented technical structure: sensor
+capture, timestamped and versioned data, validation and signal processing,
+interpretable/learned baselines, and reproducible research artifacts.
 
 ## Repository contents
 
@@ -125,8 +136,8 @@ code map, reproducibility commands and current research limitations.
 
 The included synthetic session demonstrates the software interfaces and
 reproducible workflow. It is not participant evidence. Controlled data
-collection and participant-independent validation form part of the proposed
-research programme.
+collection and participant-independent validation are kept as separate future
+validation activities.
 
 ## Quick start
 
@@ -162,6 +173,5 @@ This repository documents the implemented foundation and the next research
 steps. UWB localisation still requires anchor surveying and calibration;
 BLE/UWB behaviour requires structured field studies; and action-recognition
 experiments require independently annotated participant recordings. These open
-questions define the intended MPhil research rather than omissions being hidden
-from the reader.
+questions are documented explicitly rather than hidden from the reader.
 
