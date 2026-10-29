@@ -40,6 +40,55 @@ alignment, feature learning, evaluation, and reproducibility.
 | Multimodal supervision | Video pose and manual-label interfaces designed for later controlled studies |
 | Research validation | Participant protocol, ground truth and field evaluation remain future MPhil work |
 
+## Research system architecture
+
+```mermaid
+flowchart LR
+    subgraph sensing["Sensing and Ground Truth"]
+        imu["Four arm-worn IMU nodes"]
+        audio["On-device acoustic level features"]
+        uwb["UWB tag and three anchors"]
+        labels["Video and manual annotations"]
+    end
+
+    subgraph acquisition["Acquisition and Data Governance"]
+        collector["Local acquisition service"]
+        timing["Sequence checks and timestamp alignment"]
+        contract["Versioned session data contract"]
+    end
+
+    subgraph analysis["Motion and Position Research"]
+        quality["Schema validation and quality checks"]
+        motion["Filtering, windows and motion features"]
+        ranging["UWB ranging and localisation pipeline"]
+        methods["Interpretable rules and learning baselines"]
+    end
+
+    subgraph research["MPhil Research Programme"]
+        fusion["Multimodal alignment and fusion"]
+        evaluation["Participant-independent field evaluation"]
+        findings["Basketball action and movement findings"]
+    end
+
+    imu -->|"BLE IMU packets"| collector
+    audio -->|"BLE level features"| collector
+    uwb -->|"USB range records"| collector
+    labels -->|"Reference intervals"| contract
+    collector --> timing --> contract
+    contract --> quality
+    quality --> motion
+    quality --> ranging
+    motion --> methods
+    ranging -.-> fusion
+    methods -.-> fusion
+    labels -.-> fusion
+    fusion -.-> evaluation -.-> findings
+```
+
+Solid arrows represent the implemented acquisition and processing foundation.
+Dashed arrows identify integration and validation work proposed for the MPhil
+research programme.
+
 ## Repository contents
 
 ```text
