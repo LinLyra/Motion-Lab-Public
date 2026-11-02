@@ -5,9 +5,9 @@
 | Class | Examples | Git policy |
 | --- | --- | --- |
 | Public | source code intended for release, empty schemas, public documentation | allowed after review |
-| Internal | architecture, non-sensitive test fixtures, synthetic demo data | private repositories only |
+| Internal | unpublished notes, local debug logs, private experiment plans | private storage only |
 | Confidential research | raw IMU/UWB captures, videos, labels, participant identifiers | never commit to Git |
-| Secret | API keys, service-role credentials, signing keys, production `.env` files | secret manager only |
+| Secret | API keys, passwords, signing keys, usable `.env` files | secret manager only |
 
 ## Required controls
 
@@ -26,8 +26,8 @@
 - `.env*`, private keys, databases, generated outputs, raw captures, participant
   videos, large model/data binaries, and local legacy repositories are ignored.
 - `.env.example` may contain variable names only, never usable credentials.
-- Before the first organisational push, run secret scanning across the complete Git
-  history, not only the working tree.
+- Run secret scanning across the complete Git history before publishing changes,
+  not only across the working tree.
 
 ## Session provenance
 

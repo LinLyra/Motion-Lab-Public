@@ -21,6 +21,7 @@ OUT_DIRS = {
     "model_predictions.csv": ROOT / "outputs" / "reports",
 }
 
+
 def main():
     for name, out_dir in OUT_DIRS.items():
         out_dir.mkdir(parents=True, exist_ok=True)
@@ -28,6 +29,7 @@ def main():
         dst = out_dir / name
         shutil.copyfile(src, dst)
         print(f"created {dst.relative_to(ROOT)}")
+
 
 if __name__ == "__main__":
     main()

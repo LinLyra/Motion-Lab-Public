@@ -30,8 +30,10 @@ def train_random_forest(
     df = pd.read_csv(features_csv)
     synthetic_mask = pd.Series(False, index=df.index)
     if "session_id" in df.columns:
-        synthetic_mask |= df["session_id"].astype(str).str.contains(
-            "dummy|synthetic", case=False, regex=True
+        synthetic_mask |= (
+            df["session_id"]
+            .astype(str)
+            .str.contains("dummy|synthetic", case=False, regex=True)
         )
     if synthetic_mask.any() and not allow_synthetic:
         raise ValueError(
@@ -41,8 +43,14 @@ def train_random_forest(
     y = df["label"]
     groups, group_column = choose_split_groups(df)
     drop_cols = [
-        "session_id", "player_id", "subject", "source_file", "side",
-        "start_timestamp_us", "end_timestamp_us", "label",
+        "session_id",
+        "player_id",
+        "subject",
+        "source_file",
+        "side",
+        "start_timestamp_us",
+        "end_timestamp_us",
+        "label",
     ]
     X = df.drop(columns=[c for c in drop_cols if c in df.columns])
     X = X.select_dtypes(include=["number"]).fillna(0)
@@ -53,7 +61,9 @@ def train_random_forest(
     train_idx, test_idx = next(splitter.split(X, y_enc, groups=groups))
     if set(groups.iloc[train_idx]) & set(groups.iloc[test_idx]):
         raise RuntimeError("Group leakage detected between train and test")
-    clf = RandomForestClassifier(n_estimators=300, random_state=42, class_weight="balanced")
+    clf = RandomForestClassifier(
+        n_estimators=300, random_state=42, class_weight="balanced"
+    )
     clf.fit(X.iloc[train_idx], y_enc[train_idx])
     pred = clf.predict(X.iloc[test_idx])
     labels = list(range(len(le.classes_)))
@@ -62,17 +72,22 @@ def train_random_forest(
     )
     cm = confusion_matrix(y_enc[test_idx], pred, labels=labels)
 
-    joblib.dump({
-        "model": clf,
-        "label_encoder": le,
-        "features": list(X.columns),
-        "split_group_column": group_column,
-        "train_groups": sorted(set(groups.iloc[train_idx])),
-        "test_groups": sorted(set(groups.iloc[test_idx])),
-        "contains_synthetic_data": bool(synthetic_mask.any()),
-    }, out_dir / "rf_model.joblib")
+    joblib.dump(
+        {
+            "model": clf,
+            "label_encoder": le,
+            "features": list(X.columns),
+            "split_group_column": group_column,
+            "train_groups": sorted(set(groups.iloc[train_idx])),
+            "test_groups": sorted(set(groups.iloc[test_idx])),
+            "contains_synthetic_data": bool(synthetic_mask.any()),
+        },
+        out_dir / "rf_model.joblib",
+    )
     (out_dir / "rf_report.txt").write_text(report, encoding="utf-8")
-    pd.DataFrame(cm, index=le.classes_, columns=le.classes_).to_csv(out_dir / "rf_confusion_matrix.csv")
+    pd.DataFrame(cm, index=le.classes_, columns=le.classes_).to_csv(
+        out_dir / "rf_confusion_matrix.csv"
+    )
     return {
         "report": report,
         "model_path": str(out_dir / "rf_model.joblib"),

@@ -48,9 +48,13 @@ def load_standard_csv(path: str | Path) -> pd.DataFrame:
     version = detect_sensor_raw_version(df.columns)
     df["timestamp_us"] = _canonical_timestamp(df, version)
     if df["timestamp_us"].isna().any():
-        raise SensorDataContractError(f"{path.name} contains rows without a usable timestamp")
+        raise SensorDataContractError(
+            f"{path.name} contains rows without a usable timestamp"
+        )
     df.attrs["sensor_contract_version"] = version
-    df = df.sort_values(["session_id", "player_id", "side", "timestamp_us"]).reset_index(drop=True)
+    df = df.sort_values(
+        ["session_id", "player_id", "side", "timestamp_us"]
+    ).reset_index(drop=True)
     df.attrs["sensor_contract_version"] = version
     return df
 

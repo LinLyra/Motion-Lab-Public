@@ -1,0 +1,15 @@
+[tool.black]
+line-length = 88
+target-version = ["py310"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F"]
+
+[tool.ruff.lint.per-file-ignores]
+"scripts/02_build_features.py" = ["E402"]
+"scripts/03_train_baseline.py" = ["E402"]
+"scripts/04_run_rules.py" = ["E402"]

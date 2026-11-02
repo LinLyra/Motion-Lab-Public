@@ -16,7 +16,9 @@ MEASUREMENT = re.compile(
     r"mac_address=0x(?P<peer>[0-9a-fA-F]+),\s*status=\"(?P<status>[^\"]+)\""
     r"(?:,\s*distance\[cm\]=(?P<distance>-?\d+))?"
 )
-SEQUENCE = re.compile(r"sequence_number=(?P<sequence>\d+),\s*block_index=(?P<block>\d+)")
+SEQUENCE = re.compile(
+    r"sequence_number=(?P<sequence>\d+),\s*block_index=(?P<block>\d+)"
+)
 
 
 def configure(fd: int) -> None:
@@ -35,7 +37,9 @@ def configure(fd: int) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("port", help="macOS serial port, for example /dev/cu.usbmodemABC")
+    parser.add_argument(
+        "port", help="macOS serial port, for example /dev/cu.usbmodemABC"
+    )
     parser.add_argument("--output", default="data/uwb/live-ranging.csv")
     parser.add_argument("--initiator", type=int, default=0)
     parser.add_argument("--responder", type=int, default=1)

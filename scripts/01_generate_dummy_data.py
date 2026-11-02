@@ -27,28 +27,39 @@ for player in ["P01", "P02", "P03"]:
                     gy += 1.5 * np.sin(2 * np.pi * 2.5 * t)
                 elif label == "pass":
                     center = n // 2
-                    ax[center:center+5] += 8
-                    gy[center:center+5] += 3
+                    ax[center : center + 5] += 8
+                    gy[center : center + 5] += 3
                 elif label == "shot":
                     center = n // 2
-                    gy += 4 * np.exp(-((np.arange(n)-center)/12)**2)
-                    az += 3 * np.exp(-((np.arange(n)-center)/10)**2)
+                    gy += 4 * np.exp(-(((np.arange(n) - center) / 12) ** 2))
+                    az += 3 * np.exp(-(((np.arange(n) - center) / 10) ** 2))
                 elif label == "jump":
-                    az[n//3:n//3+3] += 10
-                    az[2*n//3:2*n//3+4] += 14
+                    az[n // 3 : n // 3 + 3] += 10
+                    az[2 * n // 3 : 2 * n // 3 + 4] += 14
                 elif label == "sprint":
                     ax += 2.5 * np.sin(2 * np.pi * 1.8 * t)
                     az += 1.5 * np.sin(2 * np.pi * 1.8 * t)
                 for i in range(n):
-                    rows.append({
-                        "session_id": "dummy_session", "player_id": player,
-                        "sensor_id": f"{player}_{side}", "side": side, "seq": seq,
-                        "timestamp_us": seq * int(1_000_000 / fs),
-                        "ax": ax[i], "ay": ay[i], "az": az[i],
-                        "gx": gx[i], "gy": gy[i], "gz": gz[i],
-                        "mx": 0.0, "my": 0.0, "mz": 0.0,
-                        "label": label,
-                    })
+                    rows.append(
+                        {
+                            "session_id": "dummy_session",
+                            "player_id": player,
+                            "sensor_id": f"{player}_{side}",
+                            "side": side,
+                            "seq": seq,
+                            "timestamp_us": seq * int(1_000_000 / fs),
+                            "ax": ax[i],
+                            "ay": ay[i],
+                            "az": az[i],
+                            "gx": gx[i],
+                            "gy": gy[i],
+                            "gz": gz[i],
+                            "mx": 0.0,
+                            "my": 0.0,
+                            "mz": 0.0,
+                            "label": label,
+                        }
+                    )
                     seq += 1
 OUT.parent.mkdir(parents=True, exist_ok=True)
 pd.DataFrame(rows).to_csv(OUT, index=False)

@@ -8,8 +8,6 @@ def predict_rule_row(row: pd.Series) -> tuple[str, float]:
     acc_freq = row.get("acc_norm_dom_freq", 0)
     acc_peaks = row.get("acc_norm_peak_count", 0)
     gyro_max = row.get("gyro_norm_max", 0)
-    gyro_freq = row.get("gyro_norm_dom_freq", 0)
-
     # collision/jump-like impact first
     if acc_max > 25 and gyro_max < 8:
         return "jump", 0.65

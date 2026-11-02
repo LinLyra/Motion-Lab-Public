@@ -28,18 +28,20 @@ def make_windows(
         if len(g) < win:
             continue
         for start in range(0, len(g) - win + 1, step):
-            chunk = g.iloc[start:start + win]
+            chunk = g.iloc[start : start + win]
             # label by majority vote inside window
             label = chunk["label"].mode().iloc[0]
             xs.append(chunk[channels].to_numpy().T)
-            metas.append({
-                "session_id": keys[0],
-                "player_id": keys[1],
-                "side": keys[2],
-                "start_timestamp_us": int(chunk["timestamp_us"].iloc[0]),
-                "end_timestamp_us": int(chunk["timestamp_us"].iloc[-1]),
-                "label": label,
-            })
+            metas.append(
+                {
+                    "session_id": keys[0],
+                    "player_id": keys[1],
+                    "side": keys[2],
+                    "start_timestamp_us": int(chunk["timestamp_us"].iloc[0]),
+                    "end_timestamp_us": int(chunk["timestamp_us"].iloc[-1]),
+                    "label": label,
+                }
+            )
     if not xs:
         return np.empty((0, len(channels), win)), pd.DataFrame(metas)
     return np.stack(xs), pd.DataFrame(metas)

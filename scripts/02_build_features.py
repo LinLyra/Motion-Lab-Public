@@ -1,5 +1,6 @@
 from pathlib import Path
 import sys
+
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.append(str(ROOT / "src"))
 
@@ -17,7 +18,9 @@ channels = cfg["imu_channels"]
 df = load_folder(raw_folder)
 df = filter_imu(df, fs=cfg["sampling_rate_hz"])
 df = add_norms(df)
-X, meta = make_windows(df, cfg["sampling_rate_hz"], cfg["window_seconds"], cfg["step_seconds"], channels)
+X, meta = make_windows(
+    df, cfg["sampling_rate_hz"], cfg["window_seconds"], cfg["step_seconds"], channels
+)
 features = extract_window_features(X, meta, channels, fs=cfg["sampling_rate_hz"])
 out_csv.parent.mkdir(parents=True, exist_ok=True)
 features.to_csv(out_csv, index=False)
